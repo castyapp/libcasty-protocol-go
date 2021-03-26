@@ -1,0 +1,22 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "ws.enums.proto";
+import "grpc.user.proto";
+
+message PingMsgEvent {
+  PERSONAL_STATE state = 1;
+}
+
+message PersonalStateMsgEvent {
+  proto.User            user      = 1;
+  PERSONAL_STATE   state     = 2;
+  Activity              activity  = 3;
+}
+
+message PersonalActivityMsgEvent {
+  User      user      = 1;
+  Activity  activity  = 2;
+}

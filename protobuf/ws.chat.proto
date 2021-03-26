@@ -1,0 +1,22 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.user.proto";
+import "google/protobuf/timestamp.proto";
+
+message ChatMsgEvent {
+  bytes                     message      = 1;
+  User                      sender       = 2;
+  User                      reciever     = 3;
+  repeated string           attachments  = 4;
+  repeated uint64           emojies      = 5;
+  repeated uint64           mentions     = 6;
+  google.protobuf.Timestamp created_at   = 7;
+}
+
+message ChatMsgDeletedEvent {
+  string                    message_id = 1;
+  google.protobuf.Timestamp deleted_at = 2;
+}

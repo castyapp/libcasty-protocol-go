@@ -1,0 +1,72 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+enum PERSONAL_STATE {
+  OFFLINE    = 0;
+  ONLINE     = 1;
+  IDLE       = 2;
+  BUSY       = 3;
+  INVISIBLE  = 4;
+}
+
+enum EMSG {
+  INVALID                             = 0;
+  PING                                = 1;
+  PONG                                = 2;
+  LOGON                               = 3;
+  LOGOUT                              = 4;
+  PERSONAL_STATE_CHANGED              = 5;
+  PERSONAL_ACTIVITY_CHANGED           = 6;
+  AUTHORIZED                          = 7;
+  UNAUTHORIZED                        = 8;
+  CHAT_MESSAGES                       = 9;
+  LOG_MESSAGES                        = 10;
+
+  // Theater general events
+  NEW_CHAT_MESSAGE                    = 11;
+  NEW_LOG_MESSAGE                     = 12;
+  MEMBER_STATE_CHANGED                = 13;
+  THEATER_MEMBERS                     = 14;
+  THEATER_PLAY                        = 15;
+  THEATER_BUFFERED_AND_PLAYED         = 16;
+  THEATER_PAUSE                       = 17;
+  NEW_NOTIFICATION                    = 18;
+  FRIEND_REQUEST_ACCEPTED             = 19;
+  THEATER_UPDATED                     = 20;
+  THEATER_MEDIA_SOURCE_CHANGED        = 21;
+
+  // Theater video player events
+  SYNC_ME                             = 22;
+  SYNCED                              = 23;
+  BUFFERING                           = 24;
+  BUFFERED                            = 25;
+  WAITING_FOR_CLIENTS                 = 26;
+  CLIENTS_SYNCYED                     = 27;
+  FINISHED_MOVIE                      = 28;
+  PLAYING                             = 29;
+  CLIENT_READY                        = 30;
+
+  // messages
+  MESSAGE_EDITED                      = 31;
+  MESSAGE_DELETED                     = 32;
+
+  // USER events
+  USER_UPDATED                        = 33;
+  SELF_USER_UPDATED                   = 34;
+  SELF_PERSONAL_STATE_CHANGED         = 35;
+  SELF_PERSONAL_ACTIVITY_CHANGED      = 36;
+  SELF_FRIEND_REQUEST_ACCEPTED        = 37;
+
+  JOIN_THEATER                        = 38;
+  LEAVE_THEATER                       = 39;
+  NEW_FRIEND                          = 40;
+  REMOVED_FRIEND                      = 41;
+
+  CALLLING                            = 42;
+  DECLINED                            = 43;
+  ANSWERED                            = 44;
+
+  GET_FRIEND_STATE                    = 45;
+}

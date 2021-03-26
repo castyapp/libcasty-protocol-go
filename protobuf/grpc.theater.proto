@@ -1,0 +1,189 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.base.proto";
+import "grpc.user.proto";
+import "google/protobuf/timestamp.proto";
+
+enum PRIVACY {
+  UNKNOWN          = 0;
+  PUBLIC           = 1;
+  PRIVATE          = 2;
+  FRIENDS          = 3;
+  CHOOSEN_FRIENDS  = 4;
+}
+
+enum VIDEO_PLAYER_ACCESS {
+  ACCESS_UNKNOWN            = 0;
+  ACCESS_BY_USER            = 1;
+  ACCESS_BY_EVERYONE        = 2;
+  ACCESS_BY_FRIENDS         = 3;
+  ACCESS_BY_CHOOSEN_FRIENDS = 4;
+}
+
+message TheaterRole {
+  string   id           = 1;
+  string   theater_id   = 2;
+  string   title        = 3;
+}
+
+message VideoPlayerAccessByRoles {
+  repeated TheaterRole roles = 1;
+}
+
+message Subtitle {
+  string  id               = 1;
+  string  media_source_id  = 2;
+  string  lang             = 3;
+  string  file             = 4;
+  google.protobuf.Timestamp  created_at  = 5;
+  google.protobuf.Timestamp  updated_at  = 6;
+}
+
+message MediaSource {
+  enum Type {
+    UNKNOWN       = 0;
+    YOUTUBE       = 1;
+    TORRENT       = 2;
+    SOUND_CLOUD   = 3;
+    DOWNLOAD_URI  = 4;
+    LOCAL_PATH    = 5;
+    SPOTIFY       = 6;
+    M3U8          = 7;
+  }
+  string    id                  = 1;
+  string    title               = 2;
+  Type      type                = 3;
+  string    banner              = 4;
+  string    uri                 = 5;
+  repeated  Subtitle subtitles  = 6;
+  string    user_id             = 7;
+  int64     length              = 8;
+  string    artist              = 9;
+  google.protobuf.Timestamp  created_at  = 10;
+  google.protobuf.Timestamp  updated_at  = 11;
+}
+
+message Theater {
+  string                      id                      = 1;
+  string                      description             = 2;
+  PRIVACY                     privacy                 = 4;
+  VIDEO_PLAYER_ACCESS         video_player_access     = 5;
+  string                      user_id                 = 6;
+  User                        user                    = 7;
+  MediaSource                 media_source            = 8;
+  bool                        followed                = 9;
+  google.protobuf.Timestamp   created_at              = 10;
+  google.protobuf.Timestamp   updated_at              = 11;
+}
+
+message TheaterAuthRequest {
+  Theater theater = 1;
+  AuthenticateRequest auth_request = 2;
+}
+
+message RemoveSubtitleRequest {
+  AuthenticateRequest auth_request = 1;
+  string subtitle_id     = 2;
+  string media_source_id = 3;
+}
+
+message TheaterSubtitlesResponse {
+  int64    code    = 1;
+  string   status  = 2;
+  string   message = 3;
+  repeated Subtitle result = 4;
+}
+
+message UserTheaterResponse {
+  int64    code    = 1;
+  string   status  = 2;
+  string   message = 3;
+  Theater result = 4;
+}
+
+message InviteFriendsTheaterRequest {
+  AuthenticateRequest auth_request = 1;
+  string theater_id = 2;
+  repeated string friend_ids = 3;
+}
+
+// Start of MediaSource requests and responses
+message MediaSourceAuthRequest {
+  AuthenticateRequest   auth_request     = 1;
+  MediaSource           media            = 2;
+  uint64                limit            = 3;
+  uint64                page             = 4;
+  uint64                per_page         = 5;
+}
+
+message MediaSourceRemoveRequest {
+  AuthenticateRequest auth_request = 1;
+  string   media_source_id         = 2;
+}
+
+message TheaterMediaSourcesResponse {
+  int64    code    = 1;
+  string   status  = 2;
+  string   message = 3;
+  repeated MediaSource result = 4;
+}
+// End of MediaSource requests and responses
+
+message GetTheaterRequest {
+  AuthenticateRequest auth_request = 1;
+  string user = 2;
+  string theater_id = 3;
+}
+
+message Follow {
+  string  id                             = 1;
+  string  theater_id                     = 2;
+  Theater theater                        = 3;
+  string  user_id                        = 4;
+  User    user                           = 5;
+  bool    email_notification             = 6;
+  bool    push_notification              = 7;
+  bool    muted                          = 8;
+  google.protobuf.Timestamp  created_at  = 9;
+  google.protobuf.Timestamp  updated_at  = 10;
+}
+
+message FollowedTheatersResponse {
+  int64    code           = 1;
+  string   status         = 2;
+  string   message        = 3;
+  repeated Theater result = 4;
+}
+
+message AddSubtitlesRequest {
+  AuthenticateRequest auth_request = 1;
+  string media_source_id           = 2;
+  repeated Subtitle subtitles      = 3;
+}
+
+message SubtitlesResponse {
+  int64    code            = 1;
+  string   status          = 2;
+  string   message         = 3;
+  repeated Subtitle result = 4;
+}
+
+service TheaterService {
+  rpc Invite(InviteFriendsTheaterRequest) returns (Response);
+  rpc GetFollowedTheaters(AuthenticateRequest) returns (FollowedTheatersResponse);
+  rpc Follow(TheaterAuthRequest) returns (Response);
+  rpc Unfollow(TheaterAuthRequest) returns (Response);
+  rpc GetTheater(GetTheaterRequest) returns (UserTheaterResponse);
+  rpc UpdateTheater(TheaterAuthRequest) returns (Response);
+  rpc AddSubtitles(AddSubtitlesRequest) returns (SubtitlesResponse);
+  rpc RemoveSubtitle(RemoveSubtitleRequest) returns (Response);
+  rpc GetSubtitles(MediaSourceAuthRequest) returns (TheaterSubtitlesResponse);
+  rpc GetMediaSources(MediaSourceAuthRequest) returns (TheaterMediaSourcesResponse);
+  rpc GetMediaSource(MediaSourceAuthRequest) returns (TheaterMediaSourcesResponse);
+  rpc SelectMediaSource(MediaSourceAuthRequest) returns (TheaterMediaSourcesResponse);
+  rpc RemoveMediaSource(MediaSourceRemoveRequest) returns (Response);
+  rpc AddMediaSource(MediaSourceAuthRequest) returns (TheaterMediaSourcesResponse);
+}

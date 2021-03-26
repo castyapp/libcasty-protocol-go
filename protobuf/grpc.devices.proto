@@ -1,0 +1,28 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "google/protobuf/timestamp.proto";
+
+message Device {
+  enum Platform {
+    UNKNOWN     = 0;
+    IPHONE      = 1;
+    ANDROID     = 2;
+    MACOS       = 3;
+    LINUX       = 4;
+    WINDOWS     = 5;
+    IPAD        = 6;
+    TABLET      = 7;
+    TV          = 8;
+  }
+  string                     id          = 1;
+  Platform                   platform    = 2;
+  string                     browser     = 3;
+  string                     user_agent  = 4;
+  string                     manifacture = 5;
+  string                     ip_address  = 6;
+  string                     country     = 7;
+  google.protobuf.Timestamp  created_at  = 8;
+}

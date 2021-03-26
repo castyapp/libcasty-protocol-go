@@ -1,0 +1,38 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.base.proto";
+import "grpc.connection.proto";
+
+message AuthRequest {
+  string user = 1;
+  string pass = 2;
+}
+
+message AuthResponse {
+  int64   code    = 1;
+  string  status  = 2;
+  bytes   token   = 3;
+  string  type    = 4;
+  string  message = 5;
+  bytes   refreshed_token = 6;
+  repeated ValidationError validation_error = 7;
+}
+
+message RefreshTokenRequest {
+  bytes refreshed_token = 1;
+}
+
+message OAUTHRequest {
+  Connection.Type     service      = 1;
+  string              code         = 2;
+  AuthenticateRequest auth_request = 3;
+}
+
+service AuthService {
+  rpc Authenticate(AuthRequest) returns (AuthResponse);
+  rpc CallbackOAUTH(OAUTHRequest) returns (AuthResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (AuthResponse);
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.user.proto";
+
+message NotificationMsgEvent {
+  Notification notification = 1;
+}
+
+message FriendRequestAcceptedMsgEvent {
+  User friend = 1;
+}

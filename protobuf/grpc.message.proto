@@ -1,0 +1,81 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.base.proto";
+import "grpc.user.proto";
+import "google/protobuf/timestamp.proto";
+
+message Message {
+  string    id                           = 1;
+  string    content                      = 2;
+  User      sender                       = 3;
+  User      reciever                     = 4;
+  bool      edited                       = 5;
+  bool      deleted                      = 6;
+  repeated  Attachment attachments       = 7;
+  repeated  Emote      emotes            = 8;
+  google.protobuf.Timestamp  created_at  = 10;
+  google.protobuf.Timestamp  updated_at  = 12;
+  google.protobuf.Timestamp  deleted_at  = 13;
+}
+
+message Attachment {
+  string                     id          = 1;
+  string                     name        = 2;
+  string                     url         = 3;
+  string                     type        = 4;
+  google.protobuf.Timestamp  created_at  = 5;
+}
+
+message Emote {
+  string                     id          = 1;
+  string                     name        = 2;
+  string                     content     = 3;
+  google.protobuf.Timestamp  created_at  = 4;
+}
+
+message GetMessagesRequest {
+  string              receiver_id  = 1;
+  AuthenticateRequest auth_request = 2;
+}
+
+message GetMessagesResponse {
+  int64    code            = 1;
+  string   status          = 2;
+  string   message         = 4;
+  repeated Message result  = 3;
+}
+
+message MessageRequest {
+  Message             message      = 1;
+  AuthenticateRequest auth_request = 2;
+}
+
+message MessageResponse {
+  int64    code    = 1;
+  string   status  = 2;
+  string   message = 4;
+  Message  result  = 3;
+}
+
+message CreateAttachmentRequest {
+  Attachment          attachment   = 1;
+  AuthenticateRequest auth_request = 2;
+}
+
+message AttachmentResponse {
+  int64       code    = 1;
+  string      status  = 2;
+  string      message = 4;
+  Attachment  result  = 3;
+}
+
+service MessagesService {
+  rpc GetUserMessages(GetMessagesRequest) returns (GetMessagesResponse);
+  rpc CreateMessage(MessageRequest) returns (MessageResponse);
+  rpc EditMessage(MessageRequest) returns (MessageResponse);
+  rpc DeleteMessage(MessageRequest) returns (MessageResponse);
+  rpc CreateAttachment(CreateAttachmentRequest) returns (AttachmentResponse);
+}

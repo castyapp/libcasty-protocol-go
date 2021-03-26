@@ -1,0 +1,236 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.base.proto";
+import "ws.enums.proto";
+import "grpc.auth.proto";
+import "grpc.connection.proto";
+import "grpc.devices.proto";
+import "google/protobuf/timestamp.proto";
+
+message Friend {
+  string  id         = 1;
+  string  friend_id  = 2;
+  string  user_id    = 3;
+  bool    accepted   = 4;
+  google.protobuf.Timestamp  created_at  = 5;
+  google.protobuf.Timestamp  updated_at  = 6;
+}
+
+message Activity {
+  string  id          = 1;
+  string  activity    = 2;
+}
+
+message User {
+  string                     id               = 1;
+  string                     fullname         = 2;
+  string                     username         = 3;
+  string                     hash             = 4;
+  string                     email            = 5;
+  string                     password         = 6;
+  bool                       is_active        = 7;
+  bool                       email_verified   = 8;
+  bool                       is_staff         = 9;
+  bool                       verified         = 10;
+  string                     avatar           = 11;
+  PERSONAL_STATE             state            = 12;
+  Activity                   activity         = 13;
+  bool                       two_fa_enabled   = 14;
+  google.protobuf.Timestamp  last_login       = 16;
+  google.protobuf.Timestamp  joined_at        = 17;
+  google.protobuf.Timestamp  updated_at       = 18;
+}
+
+message Notification {
+
+  enum NOTIFICATION_TYPE {
+    INVALID            = 0;
+    NEW_FRIEND         = 1;
+    NEW_THEATER_INVITE = 2;
+    SYSTEM_NOTIFY      = 3;
+  }
+
+  string                     id            = 1;
+  NOTIFICATION_TYPE          type          = 2;
+  string                     data          = 4;
+  bool                       read          = 5;
+  string                     from_user_id  = 6;
+  User                       from_user     = 7;
+  string                     to_user_id    = 8;
+  User                       to_user       = 9;
+  google.protobuf.Timestamp  read_at       = 10;
+  google.protobuf.Timestamp  created_at    = 11;
+  google.protobuf.Timestamp  updated_at    = 12;
+
+}
+
+message UpdateActivityRequest {
+  Activity  activity  = 1;
+  AuthenticateRequest auth_request = 2;
+}
+
+message FriendRequest {
+  string  request_id  = 1;
+  string  friend_id   = 2;
+  User    friend      = 3;
+  AuthenticateRequest auth_request = 4;
+}
+
+message CreateUserRequest {
+  User user = 1;
+}
+
+message GetFriendRequest {
+  User user = 1;
+}
+
+message GetUserResponse {
+  int64    code     = 1;
+  string   status   = 2;
+  string   message  = 3;
+  User     result   = 4;
+}
+
+message FriendsResponse {
+  int64    code    = 1;
+  string   status  = 2;
+  string   message = 3;
+  repeated User result = 4;
+}
+
+message FriendResponse {
+  int64         code    = 1;
+  string        status  = 2;
+  string        message = 3;
+  User result  = 4;
+}
+
+message CreateNotificationRequest {
+  Notification notification = 1;
+  AuthenticateRequest   auth_request = 2;
+}
+
+message NotificationResponse {
+  int64         code          = 1;
+  string        status        = 2;
+  string        message       = 3;
+  int64         unread_count  = 4;
+  repeated      Notification result  = 5;
+}
+
+message SearchUserRequest {
+  string keyword = 1;
+  AuthenticateRequest auth_request = 2;
+}
+
+message SearchUserResponse {
+  int64         code    = 1;
+  string        status  = 2;
+  string        message = 3;
+  repeated User result  = 4;
+}
+
+message UpdateUserRequest {
+  AuthenticateRequest auth_request = 1;
+  User       result       = 2;
+}
+
+message UpdatePasswordRequest {
+  AuthenticateRequest auth_request = 1;
+  string current_password    = 2;
+  string new_password        = 3;
+  string verify_new_password = 4;
+}
+
+// start of two factor authentication messages
+message RecoveryCode {
+  string                     id          = 1;
+  string                     code        = 2;
+  string                     user_id     = 3;
+  google.protobuf.Timestamp  created_at  = 4;
+}
+
+message RecoveryCodesResponse {
+  int64    code    = 1;
+  string   status  = 2;
+  string   message = 3;
+  repeated RecoveryCode result = 4;
+}
+
+message TwoFactorAuthRequest {
+  string              code         = 1;
+  AuthenticateRequest auth_request = 2;
+}
+// end of two factor authentication messages
+
+message PendingFriendRequests {
+  int64                   code     = 1;
+  string                  status   = 2;
+  string                  message  = 3;
+  repeated FriendRequest  result   = 4;
+}
+
+message ConnectionRequest {
+  Connection           connection    = 1;
+  AuthenticateRequest  auth_request  = 2;
+}
+
+message UpdateStateRequest {
+  PERSONAL_STATE       state         = 1;
+  AuthenticateRequest  auth_request  = 2;
+}
+
+message CreateUserDevice {
+  Device               device        = 1;
+  AuthenticateRequest  auth_request  = 2;
+}
+
+message UserDeviceResponse {
+  int64            code     = 1;
+  string           status   = 2;
+  string           message  = 3;
+  repeated Device  result   = 4;
+}
+
+service UserService {
+  // User Profile
+  rpc UpdateState(UpdateStateRequest) returns (Response);
+  rpc UpdateActivity(UpdateActivityRequest) returns (Response);
+  rpc RemoveActivity(AuthenticateRequest) returns (Response);
+  rpc GetUser(AuthenticateRequest) returns (GetUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (GetUserResponse);
+  rpc Search(SearchUserRequest) returns (SearchUserResponse);
+  rpc CreateUser(CreateUserRequest) returns (AuthResponse);
+
+  // Security
+  rpc UpdatePassword(UpdatePasswordRequest) returns (Response);
+  rpc GenerateRecoveryCodes(AuthenticateRequest) returns(RecoveryCodesResponse);
+  rpc EnableTwoFactorAuth(TwoFactorAuthRequest) returns (Response);
+  rpc DisableTwoFactorAuth(TwoFactorAuthRequest) returns (Response);
+
+  // FriendZone
+  rpc GetFriend(FriendRequest) returns (FriendResponse);
+  rpc GetPendingFriendRequests(AuthenticateRequest) returns (PendingFriendRequests);
+  rpc GetFriendRequest(FriendRequest) returns (Friend);
+  rpc SendFriendRequest(FriendRequest) returns (Response);
+  rpc AcceptFriendRequest(FriendRequest) returns (Response);
+  rpc GetFriends(AuthenticateRequest) returns (FriendsResponse);
+  rpc GetOnlineFriends(AuthenticateRequest) returns (FriendsResponse);
+
+  // Connections
+  rpc GetConnection(ConnectionRequest) returns (ConnectionsResponse);
+  rpc GetConnections(AuthenticateRequest) returns (ConnectionsResponse);
+  rpc UpdateConnection(ConnectionRequest) returns (ConnectionsResponse);
+
+  // Notifications
+  rpc GetNotifications(AuthenticateRequest) returns (NotificationResponse);
+  rpc CreateNotification(CreateNotificationRequest) returns (NotificationResponse);
+  rpc ReadAllNotifications(AuthenticateRequest) returns (NotificationResponse);
+
+  // User Devices
+  rpc CreateDevice(CreateUserDevice) returns (Response);
+  rpc GetDevices(AuthenticateRequest) returns (UserDeviceResponse);
+}

@@ -1,0 +1,34 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "google/protobuf/timestamp.proto";
+import "grpc.theater.proto";
+
+message TheaterVideoPlayer {
+  enum State {
+    INVALID  = 0;
+    PLAYING  = 1;
+    PAUSED   = 2;
+  }
+  string                     theater_id    = 1;
+  MediaSource                media_source  = 2;
+  float                      current_time  = 4;
+  State                      state         = 5;
+  string                     user_id       = 6;
+  google.protobuf.Timestamp  sent_at       = 7;
+}
+
+message JoinTheaterMsgEvent {
+  string theater_id = 1;
+}
+
+message LeaveTheaterMsgEvent {
+  string theater_id = 1;
+}
+
+message MediaSourceChangedEvent {
+  string  theater_id       = 1;
+  string  media_source_id  = 2;
+}
