@@ -22,7 +22,7 @@ jobs:
       run: make install_protoc_linux_x86_64
 
     - name: Compile protobuffers
-      run: make compile
+      run: make gh_protoc_compile
 
     - name: Test
       run: make test
