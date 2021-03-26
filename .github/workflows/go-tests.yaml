@@ -18,11 +18,13 @@ jobs:
       with:
         go-version: 1.15
 
-    - name: Install protoc `protobuf compiler`
-      run: make install_protoc_linux_x86_64
+    - name: Install Protoc
+      uses: arduino/setup-protoc@v1
+      with:
+        version: '3.15.6'
 
     - name: Compile protobuffers
-      run: make gh_protoc_compile
+      run: make compile
 
     - name: Test
       run: make test
