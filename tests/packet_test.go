@@ -1,16 +1,17 @@
-package protocol
+package tests
 
 import (
 	"testing"
 
 	"github.com/castyapp/libcasty-protocol-go/proto"
+	"github.com/castyapp/libcasty-protocol-go/protocol"
 	pb "github.com/golang/protobuf/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPacket(t *testing.T) {
 	t.Parallel()
-	packet, err := NewPacket([]byte(""))
+	packet, err := protocol.NewPacket([]byte(""))
 	assert.EqualError(t, err, "EOF")
 	assert.Nil(t, packet)
 }
@@ -20,7 +21,7 @@ func TestPingPongBytesToPacket(t *testing.T) {
 	// Ping bytes packet
 	pingBytesPacket := []byte{1, 0, 0, 0}
 
-	packet, err := NewPacket(pingBytesPacket)
+	packet, err := protocol.NewPacket(pingBytesPacket)
 	assert.NoError(t, err)
 	assert.NotNil(t, packet)
 	assert.Equal(t, packet.EMsg, proto.EMSG_PING)
@@ -28,7 +29,7 @@ func TestPingPongBytesToPacket(t *testing.T) {
 	// Pong bytes packet
 	pongBytesPacket := []byte{2, 0, 0, 0}
 
-	packet, err = NewPacket(pongBytesPacket)
+	packet, err = protocol.NewPacket(pongBytesPacket)
 	assert.NoError(t, err)
 	assert.NotNil(t, packet)
 	assert.Equal(t, packet.EMsg, proto.EMSG_PONG)
@@ -43,7 +44,7 @@ func TestLogonBytesToPacket(t *testing.T) {
 		117, 114, 101, 45, 116, 111, 107, 101, 110,
 	}
 
-	packet, err := NewPacket(logonBytesPacket)
+	packet, err := protocol.NewPacket(logonBytesPacket)
 	assert.NoError(t, err)
 	assert.NotNil(t, packet)
 	assert.Equal(t, packet.EMsg, proto.EMSG_LOGON)
@@ -56,12 +57,12 @@ func TestLogonBytesToPacket(t *testing.T) {
 	assert.Equal(t, logonPacket.Token, []byte("super-secure-token"))
 }
 
-func PacketEncodingDecodingTest(t *testing.T, emsg proto.EMSG, message pb.Message) *Packet {
+func PacketEncodingDecodingTest(t *testing.T, emsg proto.EMSG, message pb.Message) *protocol.Packet {
 
-	buf, err := NewMsgProtobuf(emsg, message)
+	buf, err := protocol.NewMsgProtobuf(emsg, message)
 	assert.NoError(t, err)
 
-	packet, err := NewPacket(buf.Bytes())
+	packet, err := protocol.NewPacket(buf.Bytes())
 	assert.NoError(t, err)
 
 	assert.True(t, packet.IsProto)
@@ -74,7 +75,7 @@ type EventTest struct {
 	name       string
 	event      pb.Message
 	emsg       proto.EMSG
-	readerTest func(e EventTest, p *Packet)
+	readerTest func(e EventTest, p *protocol.Packet)
 }
 
 func (e EventTest) Run(t *testing.T) {
@@ -93,7 +94,7 @@ func TestEvents(t *testing.T) {
 				Password: []byte("random-password"),
 			},
 			emsg: proto.EMSG_LOGON,
-			readerTest: func(e EventTest, p *Packet) {
+			readerTest: func(e EventTest, p *protocol.Packet) {
 				logonEvent := new(proto.LogOnEvent)
 				err := p.ReadProtoMsg(logonEvent)
 				assert.NoError(t, err)
@@ -110,7 +111,7 @@ func TestEvents(t *testing.T) {
 				Token: []byte("random-token"),
 			},
 			emsg: proto.EMSG_LOGON,
-			readerTest: func(e EventTest, p *Packet) {
+			readerTest: func(e EventTest, p *protocol.Packet) {
 				logonEvent := new(proto.TheaterLogOnEvent)
 				err := p.ReadProtoMsg(logonEvent)
 				assert.NoError(t, err)
@@ -128,7 +129,7 @@ func TestEvents(t *testing.T) {
 				},
 			},
 			emsg: proto.EMSG_NEW_CHAT_MESSAGE,
-			readerTest: func(e EventTest, p *Packet) {
+			readerTest: func(e EventTest, p *protocol.Packet) {
 				logonEvent := new(proto.ChatMsgEvent)
 				err := p.ReadProtoMsg(logonEvent)
 				assert.NoError(t, err)
@@ -146,7 +147,7 @@ func TestEvents(t *testing.T) {
 				UserId:      "random-user-id-238wdfisjd",
 			},
 			emsg: proto.EMSG_PLAYING,
-			readerTest: func(e EventTest, p *Packet) {
+			readerTest: func(e EventTest, p *protocol.Packet) {
 				logonEvent := new(proto.TheaterVideoPlayer)
 				err := p.ReadProtoMsg(logonEvent)
 				assert.NoError(t, err)
@@ -166,7 +167,7 @@ func TestEvents(t *testing.T) {
 				UserId:      "random-user-id-238wdfisjd",
 			},
 			emsg: proto.EMSG_THEATER_PAUSE,
-			readerTest: func(e EventTest, p *Packet) {
+			readerTest: func(e EventTest, p *protocol.Packet) {
 
 				logonEvent := new(proto.TheaterVideoPlayer)
 				err := p.ReadProtoMsg(logonEvent)

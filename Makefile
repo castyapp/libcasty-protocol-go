@@ -6,6 +6,6 @@ install_protoc_linux_x86_64:
 	rm -rf /tmp/protoc-3.15.6-linux-x86_64.zip
 	chmod +x /tmp/protoc-3.15.6-linux-x86_64/bin/protoc
 test:
-	gotestsum --format standard-verbose
+	go test ./tests -v -race
 compile:
 	protoc -I=protobuf --go_out=proto --go-grpc_out=proto protobuf/*.proto
