@@ -69,4 +69,14 @@ enum EMSG {
   ANSWERED                            = 44;
 
   GET_FRIEND_STATE                    = 45;
+
+  // Media server events
+  VOICE_CONNECTION_UPDATED            = 46;
+  VOICE_CONNECTION_CREATED            = 46;
+  VOICE_CONNECTION_REMOVED            = 46;
+  VOICE_CONNECTION_MUTED              = 47;
+  VOICE_CONNECTION_DEAFENED           = 48;
+  
+  RENEGOTIATION_NEEDED                = 49;
+  JOIN_THEATER_VOICE_SERVER           = 50;
 }

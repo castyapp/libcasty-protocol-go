@@ -1,0 +1,16 @@
+syntax = "proto3";
+package proto;
+
+option go_package = ".;proto";
+
+import "grpc.user.proto";
+import "grpc.theater.proto";
+
+message VoiceConnection {
+  string    id        = 1;
+  bool      muted     = 2;
+  bool      deafened  = 3;
+  bool      talking   = 4;
+  User      user      = 5;
+  Theater   theater   = 6;
+}
