@@ -14,3 +14,58 @@ message VoiceConnection {
   User      user      = 5;
   Theater   theater   = 6;
 }
+
+message JoinVoiceChannel {
+  string              theater_id  = 1;
+  SessionDescription  sdp         = 2;
+}
+
+message IceCandidate {
+  string  candidate         = 1;
+	string  sdpMid            = 2;
+	uint64  sdpMLineIndex     = 3;
+	string  usernameFragment  = 4;
+}
+
+message Renegotiation {
+  string              voice_connection_id  = 1;
+  SessionDescription  sdp                  = 2;
+}
+
+message SessionDescription {
+
+  enum TYPE {
+    // Invalid type session description
+    SDPInvalid      = 0;
+
+    // SDPTypeOffer indicates that a description MUST be treated as an SDP
+    // offer.
+    SDPTypeOffer    = 1;
+
+    // SDPTypePranswer indicates that a description MUST be treated as an
+    // SDP answer, but not a final answer. A description used as an SDP
+    // pranswer may be applied as a response to an SDP offer, or an update to
+    // a previously sent SDP pranswer.
+    SDPTypePranswer = 2;
+
+    // SDPTypeAnswer indicates that a description MUST be treated as an SDP
+    // final answer, and the offer-answer exchange MUST be considered complete.
+    // A description used as an SDP answer may be applied as a response to an
+    // SDP offer or as an update to a previously sent SDP pranswer.
+    SDPTypeAnswer   = 3;
+
+    // SDPTypeRollback indicates that a description MUST be treated as
+    // canceling the current SDP negotiation and moving the SDP offer and
+    // answer back to what it was in the previous stable state. Note the
+    // local or remote SDP descriptions in the previous stable state could be
+    // null if there has not yet been a successful offer-answer negotiation.
+    SDPTypeRollback = 4;
+  }
+
+  TYPE     type  = 1;
+  string   sdp   = 2;
+}
+
+message LeaveVoiceChannel {
+  string  voice_connection_id  = 1;
+}

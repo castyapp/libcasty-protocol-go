@@ -25,6 +25,77 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+type SessionDescription_TYPE int32
+
+const (
+	// Invalid type session description
+	SessionDescription_SDPInvalid SessionDescription_TYPE = 0
+	// SDPTypeOffer indicates that a description MUST be treated as an SDP
+	// offer.
+	SessionDescription_SDPTypeOffer SessionDescription_TYPE = 1
+	// SDPTypePranswer indicates that a description MUST be treated as an
+	// SDP answer, but not a final answer. A description used as an SDP
+	// pranswer may be applied as a response to an SDP offer, or an update to
+	// a previously sent SDP pranswer.
+	SessionDescription_SDPTypePranswer SessionDescription_TYPE = 2
+	// SDPTypeAnswer indicates that a description MUST be treated as an SDP
+	// final answer, and the offer-answer exchange MUST be considered complete.
+	// A description used as an SDP answer may be applied as a response to an
+	// SDP offer or as an update to a previously sent SDP pranswer.
+	SessionDescription_SDPTypeAnswer SessionDescription_TYPE = 3
+	// SDPTypeRollback indicates that a description MUST be treated as
+	// canceling the current SDP negotiation and moving the SDP offer and
+	// answer back to what it was in the previous stable state. Note the
+	// local or remote SDP descriptions in the previous stable state could be
+	// null if there has not yet been a successful offer-answer negotiation.
+	SessionDescription_SDPTypeRollback SessionDescription_TYPE = 4
+)
+
+// Enum value maps for SessionDescription_TYPE.
+var (
+	SessionDescription_TYPE_name = map[int32]string{
+		0: "SDPInvalid",
+		1: "SDPTypeOffer",
+		2: "SDPTypePranswer",
+		3: "SDPTypeAnswer",
+		4: "SDPTypeRollback",
+	}
+	SessionDescription_TYPE_value = map[string]int32{
+		"SDPInvalid":      0,
+		"SDPTypeOffer":    1,
+		"SDPTypePranswer": 2,
+		"SDPTypeAnswer":   3,
+		"SDPTypeRollback": 4,
+	}
+)
+
+func (x SessionDescription_TYPE) Enum() *SessionDescription_TYPE {
+	p := new(SessionDescription_TYPE)
+	*p = x
+	return p
+}
+
+func (x SessionDescription_TYPE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SessionDescription_TYPE) Descriptor() protoreflect.EnumDescriptor {
+	return file_ws_media_proto_enumTypes[0].Descriptor()
+}
+
+func (SessionDescription_TYPE) Type() protoreflect.EnumType {
+	return &file_ws_media_proto_enumTypes[0]
+}
+
+func (x SessionDescription_TYPE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SessionDescription_TYPE.Descriptor instead.
+func (SessionDescription_TYPE) EnumDescriptor() ([]byte, []int) {
+	return file_ws_media_proto_rawDescGZIP(), []int{4, 0}
+}
+
 type VoiceConnection struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -112,6 +183,289 @@ func (x *VoiceConnection) GetTheater() *Theater {
 	return nil
 }
 
+type JoinVoiceChannel struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TheaterId string              `protobuf:"bytes,1,opt,name=theater_id,json=theaterId,proto3" json:"theater_id,omitempty"`
+	Sdp       *SessionDescription `protobuf:"bytes,2,opt,name=sdp,proto3" json:"sdp,omitempty"`
+}
+
+func (x *JoinVoiceChannel) Reset() {
+	*x = JoinVoiceChannel{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ws_media_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *JoinVoiceChannel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JoinVoiceChannel) ProtoMessage() {}
+
+func (x *JoinVoiceChannel) ProtoReflect() protoreflect.Message {
+	mi := &file_ws_media_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JoinVoiceChannel.ProtoReflect.Descriptor instead.
+func (*JoinVoiceChannel) Descriptor() ([]byte, []int) {
+	return file_ws_media_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *JoinVoiceChannel) GetTheaterId() string {
+	if x != nil {
+		return x.TheaterId
+	}
+	return ""
+}
+
+func (x *JoinVoiceChannel) GetSdp() *SessionDescription {
+	if x != nil {
+		return x.Sdp
+	}
+	return nil
+}
+
+type IceCandidate struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Candidate        string `protobuf:"bytes,1,opt,name=candidate,proto3" json:"candidate,omitempty"`
+	SdpMid           string `protobuf:"bytes,2,opt,name=sdpMid,proto3" json:"sdpMid,omitempty"`
+	SdpMLineIndex    uint64 `protobuf:"varint,3,opt,name=sdpMLineIndex,proto3" json:"sdpMLineIndex,omitempty"`
+	UsernameFragment string `protobuf:"bytes,4,opt,name=usernameFragment,proto3" json:"usernameFragment,omitempty"`
+}
+
+func (x *IceCandidate) Reset() {
+	*x = IceCandidate{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ws_media_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *IceCandidate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IceCandidate) ProtoMessage() {}
+
+func (x *IceCandidate) ProtoReflect() protoreflect.Message {
+	mi := &file_ws_media_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IceCandidate.ProtoReflect.Descriptor instead.
+func (*IceCandidate) Descriptor() ([]byte, []int) {
+	return file_ws_media_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *IceCandidate) GetCandidate() string {
+	if x != nil {
+		return x.Candidate
+	}
+	return ""
+}
+
+func (x *IceCandidate) GetSdpMid() string {
+	if x != nil {
+		return x.SdpMid
+	}
+	return ""
+}
+
+func (x *IceCandidate) GetSdpMLineIndex() uint64 {
+	if x != nil {
+		return x.SdpMLineIndex
+	}
+	return 0
+}
+
+func (x *IceCandidate) GetUsernameFragment() string {
+	if x != nil {
+		return x.UsernameFragment
+	}
+	return ""
+}
+
+type Renegotiation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	VoiceConnectionId string              `protobuf:"bytes,1,opt,name=voice_connection_id,json=voiceConnectionId,proto3" json:"voice_connection_id,omitempty"`
+	Sdp               *SessionDescription `protobuf:"bytes,2,opt,name=sdp,proto3" json:"sdp,omitempty"`
+}
+
+func (x *Renegotiation) Reset() {
+	*x = Renegotiation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ws_media_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Renegotiation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Renegotiation) ProtoMessage() {}
+
+func (x *Renegotiation) ProtoReflect() protoreflect.Message {
+	mi := &file_ws_media_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Renegotiation.ProtoReflect.Descriptor instead.
+func (*Renegotiation) Descriptor() ([]byte, []int) {
+	return file_ws_media_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Renegotiation) GetVoiceConnectionId() string {
+	if x != nil {
+		return x.VoiceConnectionId
+	}
+	return ""
+}
+
+func (x *Renegotiation) GetSdp() *SessionDescription {
+	if x != nil {
+		return x.Sdp
+	}
+	return nil
+}
+
+type SessionDescription struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Type SessionDescription_TYPE `protobuf:"varint,1,opt,name=type,proto3,enum=proto.SessionDescription_TYPE" json:"type,omitempty"`
+	Sdp  string                  `protobuf:"bytes,2,opt,name=sdp,proto3" json:"sdp,omitempty"`
+}
+
+func (x *SessionDescription) Reset() {
+	*x = SessionDescription{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ws_media_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SessionDescription) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionDescription) ProtoMessage() {}
+
+func (x *SessionDescription) ProtoReflect() protoreflect.Message {
+	mi := &file_ws_media_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionDescription.ProtoReflect.Descriptor instead.
+func (*SessionDescription) Descriptor() ([]byte, []int) {
+	return file_ws_media_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SessionDescription) GetType() SessionDescription_TYPE {
+	if x != nil {
+		return x.Type
+	}
+	return SessionDescription_SDPInvalid
+}
+
+func (x *SessionDescription) GetSdp() string {
+	if x != nil {
+		return x.Sdp
+	}
+	return ""
+}
+
+type LeaveVoiceChannel struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	VoiceConnectionId string `protobuf:"bytes,1,opt,name=voice_connection_id,json=voiceConnectionId,proto3" json:"voice_connection_id,omitempty"`
+}
+
+func (x *LeaveVoiceChannel) Reset() {
+	*x = LeaveVoiceChannel{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ws_media_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LeaveVoiceChannel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveVoiceChannel) ProtoMessage() {}
+
+func (x *LeaveVoiceChannel) ProtoReflect() protoreflect.Message {
+	mi := &file_ws_media_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveVoiceChannel.ProtoReflect.Descriptor instead.
+func (*LeaveVoiceChannel) Descriptor() ([]byte, []int) {
+	return file_ws_media_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *LeaveVoiceChannel) GetVoiceConnectionId() string {
+	if x != nil {
+		return x.VoiceConnectionId
+	}
+	return ""
+}
+
 var File_ws_media_proto protoreflect.FileDescriptor
 
 var file_ws_media_proto_rawDesc = []byte{
@@ -130,7 +484,46 @@ var file_ws_media_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x12, 0x28, 0x0a,
 	0x07, 0x74, 0x68, 0x65, 0x61, 0x74, 0x65, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x54, 0x68, 0x65, 0x61, 0x74, 0x65, 0x72, 0x52, 0x07,
-	0x74, 0x68, 0x65, 0x61, 0x74, 0x65, 0x72, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x3b, 0x70, 0x72, 0x6f,
+	0x74, 0x68, 0x65, 0x61, 0x74, 0x65, 0x72, 0x22, 0x5e, 0x0a, 0x10, 0x4a, 0x6f, 0x69, 0x6e, 0x56,
+	0x6f, 0x69, 0x63, 0x65, 0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x12, 0x1d, 0x0a, 0x0a, 0x74,
+	0x68, 0x65, 0x61, 0x74, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x74, 0x68, 0x65, 0x61, 0x74, 0x65, 0x72, 0x49, 0x64, 0x12, 0x2b, 0x0a, 0x03, 0x73, 0x64,
+	0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x03, 0x73, 0x64, 0x70, 0x22, 0x96, 0x01, 0x0a, 0x0c, 0x49, 0x63, 0x65, 0x43,
+	0x61, 0x6e, 0x64, 0x69, 0x64, 0x61, 0x74, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x63, 0x61, 0x6e, 0x64,
+	0x69, 0x64, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x61, 0x6e,
+	0x64, 0x69, 0x64, 0x61, 0x74, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x64, 0x70, 0x4d, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x64, 0x70, 0x4d, 0x69, 0x64, 0x12, 0x24,
+	0x0a, 0x0d, 0x73, 0x64, 0x70, 0x4d, 0x4c, 0x69, 0x6e, 0x65, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x73, 0x64, 0x70, 0x4d, 0x4c, 0x69, 0x6e, 0x65, 0x49,
+	0x6e, 0x64, 0x65, 0x78, 0x12, 0x2a, 0x0a, 0x10, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65,
+	0x46, 0x72, 0x61, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10,
+	0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x46, 0x72, 0x61, 0x67, 0x6d, 0x65, 0x6e, 0x74,
+	0x22, 0x6c, 0x0a, 0x0d, 0x52, 0x65, 0x6e, 0x65, 0x67, 0x6f, 0x74, 0x69, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x2e, 0x0a, 0x13, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x5f, 0x63, 0x6f, 0x6e, 0x6e, 0x65,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x11,
+	0x76, 0x6f, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x49,
+	0x64, 0x12, 0x2b, 0x0a, 0x03, 0x73, 0x64, 0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x65,
+	0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x03, 0x73, 0x64, 0x70, 0x22, 0xc1,
+	0x01, 0x0a, 0x12, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x32, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0e, 0x32, 0x1e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x54,
+	0x59, 0x50, 0x45, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x73, 0x64, 0x70,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x73, 0x64, 0x70, 0x22, 0x65, 0x0a, 0x04, 0x54,
+	0x59, 0x50, 0x45, 0x12, 0x0e, 0x0a, 0x0a, 0x53, 0x44, 0x50, 0x49, 0x6e, 0x76, 0x61, 0x6c, 0x69,
+	0x64, 0x10, 0x00, 0x12, 0x10, 0x0a, 0x0c, 0x53, 0x44, 0x50, 0x54, 0x79, 0x70, 0x65, 0x4f, 0x66,
+	0x66, 0x65, 0x72, 0x10, 0x01, 0x12, 0x13, 0x0a, 0x0f, 0x53, 0x44, 0x50, 0x54, 0x79, 0x70, 0x65,
+	0x50, 0x72, 0x61, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x10, 0x02, 0x12, 0x11, 0x0a, 0x0d, 0x53, 0x44,
+	0x50, 0x54, 0x79, 0x70, 0x65, 0x41, 0x6e, 0x73, 0x77, 0x65, 0x72, 0x10, 0x03, 0x12, 0x13, 0x0a,
+	0x0f, 0x53, 0x44, 0x50, 0x54, 0x79, 0x70, 0x65, 0x52, 0x6f, 0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b,
+	0x10, 0x04, 0x22, 0x43, 0x0a, 0x11, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x56, 0x6f, 0x69, 0x63, 0x65,
+	0x43, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x12, 0x2e, 0x0a, 0x13, 0x76, 0x6f, 0x69, 0x63, 0x65,
+	0x5f, 0x63, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x11, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x6e, 0x6e, 0x65,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x3b, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
@@ -146,20 +539,30 @@ func file_ws_media_proto_rawDescGZIP() []byte {
 	return file_ws_media_proto_rawDescData
 }
 
-var file_ws_media_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_ws_media_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_ws_media_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_ws_media_proto_goTypes = []interface{}{
-	(*VoiceConnection)(nil), // 0: proto.VoiceConnection
-	(*User)(nil),            // 1: proto.User
-	(*Theater)(nil),         // 2: proto.Theater
+	(SessionDescription_TYPE)(0), // 0: proto.SessionDescription.TYPE
+	(*VoiceConnection)(nil),      // 1: proto.VoiceConnection
+	(*JoinVoiceChannel)(nil),     // 2: proto.JoinVoiceChannel
+	(*IceCandidate)(nil),         // 3: proto.IceCandidate
+	(*Renegotiation)(nil),        // 4: proto.Renegotiation
+	(*SessionDescription)(nil),   // 5: proto.SessionDescription
+	(*LeaveVoiceChannel)(nil),    // 6: proto.LeaveVoiceChannel
+	(*User)(nil),                 // 7: proto.User
+	(*Theater)(nil),              // 8: proto.Theater
 }
 var file_ws_media_proto_depIdxs = []int32{
-	1, // 0: proto.VoiceConnection.user:type_name -> proto.User
-	2, // 1: proto.VoiceConnection.theater:type_name -> proto.Theater
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	7, // 0: proto.VoiceConnection.user:type_name -> proto.User
+	8, // 1: proto.VoiceConnection.theater:type_name -> proto.Theater
+	5, // 2: proto.JoinVoiceChannel.sdp:type_name -> proto.SessionDescription
+	5, // 3: proto.Renegotiation.sdp:type_name -> proto.SessionDescription
+	0, // 4: proto.SessionDescription.type:type_name -> proto.SessionDescription.TYPE
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_ws_media_proto_init() }
@@ -182,19 +585,80 @@ func file_ws_media_proto_init() {
 				return nil
 			}
 		}
+		file_ws_media_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*JoinVoiceChannel); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_ws_media_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*IceCandidate); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_ws_media_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Renegotiation); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_ws_media_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SessionDescription); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_ws_media_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LeaveVoiceChannel); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_ws_media_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   1,
+			NumEnums:      1,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_ws_media_proto_goTypes,
 		DependencyIndexes: file_ws_media_proto_depIdxs,
+		EnumInfos:         file_ws_media_proto_enumTypes,
 		MessageInfos:      file_ws_media_proto_msgTypes,
 	}.Build()
 	File_ws_media_proto = out.File

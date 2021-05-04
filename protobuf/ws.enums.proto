@@ -64,19 +64,21 @@ enum EMSG {
   NEW_FRIEND                          = 40;
   REMOVED_FRIEND                      = 41;
 
-  CALLLING                            = 42;
-  DECLINED                            = 43;
-  ANSWERED                            = 44;
+  INCOMING_CALL                       = 42;
+  CALLLING                            = 43;
+  DECLINED                            = 44;
+  ANSWERED                            = 45;
 
-  GET_FRIEND_STATE                    = 45;
+  GET_FRIEND_STATE                    = 46;
 
   // Media server events
-  VOICE_CONNECTION_UPDATED            = 46;
-  VOICE_CONNECTION_CREATED            = 47;
-  VOICE_CONNECTION_REMOVED            = 48;
-  VOICE_CONNECTION_MUTED              = 49;
-  VOICE_CONNECTION_DEAFENED           = 50;
-  
-  RENEGOTIATION_NEEDED                = 51;
-  JOIN_THEATER_VOICE_SERVER           = 52;
+  VOICE_CONNECTION_UPDATED            = 47;
+  VOICE_CONNECTION_CREATED            = 48;
+  VOICE_CONNECTION_REMOVED            = 49;
+  VOICE_CONNECTION_MUTED              = 50;
+  VOICE_CONNECTION_DEAFENED           = 51;
+  RELAY_SESSION_DESCRIPTION           = 52;
+  RELAY_ICE_CANDIDATE                 = 53;
+  RENEGOTIATION_NEEDED                = 54;
+  JOIN_THEATER_VOICE_SERVER           = 55;
 }

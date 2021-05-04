@@ -11,9 +11,9 @@ message PingMsgEvent {
 }
 
 message PersonalStateMsgEvent {
-  proto.User            user      = 1;
+  proto.User       user      = 1;
   PERSONAL_STATE   state     = 2;
-  Activity              activity  = 3;
+  Activity         activity  = 3;
 }
 
 message PersonalActivityMsgEvent {
