@@ -124,7 +124,7 @@ func TestEvents(t *testing.T) {
 			name: "ChatMsgEvent",
 			event: &proto.ChatMsgEvent{
 				Message: []byte("random-message"),
-				Reciever: &proto.User{
+				Receiver: &proto.User{
 					Id: "random-user-id-234o2734827304",
 				},
 			},
@@ -135,7 +135,7 @@ func TestEvents(t *testing.T) {
 				assert.NoError(t, err)
 				payload := e.event.(*proto.ChatMsgEvent)
 				assert.Equal(t, logonEvent.Message, payload.Message)
-				assert.Equal(t, logonEvent.Reciever.Id, payload.Reciever.Id)
+				assert.Equal(t, logonEvent.Receiver.Id, payload.Receiver.Id)
 			},
 		},
 		{

@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // MessagesServiceClient is the client API for MessagesService service.
@@ -118,7 +119,7 @@ type UnsafeMessagesServiceServer interface {
 }
 
 func RegisterMessagesServiceServer(s grpc.ServiceRegistrar, srv MessagesServiceServer) {
-	s.RegisterService(&_MessagesService_serviceDesc, srv)
+	s.RegisterService(&MessagesService_ServiceDesc, srv)
 }
 
 func _MessagesService_GetUserMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -211,7 +212,10 @@ func _MessagesService_CreateAttachment_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-var _MessagesService_serviceDesc = grpc.ServiceDesc{
+// MessagesService_ServiceDesc is the grpc.ServiceDesc for MessagesService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var MessagesService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.MessagesService",
 	HandlerType: (*MessagesServiceServer)(nil),
 	Methods: []grpc.MethodDesc{

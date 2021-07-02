@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 message ChatMsgEvent {
   bytes                     message      = 1;
   User                      sender       = 2;
-  User                      reciever     = 3;
+  User                      receiver     = 3;
   repeated string           attachments  = 4;
   repeated uint64           emojies      = 5;
   repeated uint64           mentions     = 6;

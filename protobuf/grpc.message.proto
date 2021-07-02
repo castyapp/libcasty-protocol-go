@@ -11,7 +11,7 @@ message Message {
   string    id                           = 1;
   string    content                      = 2;
   User      sender                       = 3;
-  User      reciever                     = 4;
+  User      receiver                     = 4;
   bool      edited                       = 5;
   bool      deleted                      = 6;
   repeated  Attachment attachments       = 7;
